@@ -26,4 +26,4 @@ def generate_diff(file_path1, file_path2):
     json1 = load_json(file_path1)
     json2 = load_json(file_path2)
     differences = compare_json(json1, json2)
-    return '{\n'+'\n'.join(differences)+'\n}'
+    return '{\n' + '\n'.join(differences) + '\n}'
