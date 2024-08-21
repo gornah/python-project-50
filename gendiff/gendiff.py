@@ -11,14 +11,14 @@ def compare_json(json1, json2):
     all_keys = sorted(set(json1.keys()).union(json2.keys()))
     for key in all_keys:
         if key in json1 and key not in json2:
-            differences.append(f'- {key}: {json1[key]}')
+            differences.append(f'  - {key}: {json1[key]}')
         elif key in json2 and key not in json1:
-            differences.append(f'+ {key}: {json2[key]}')
+            differences.append(f'  + {key}: {json2[key]}')
         elif json1[key] != json2[key]:
-            differences.append(f'- {key}: {json1[key]}')
-            differences.append(f'+ {key}: {json2[key]}')
+            differences.append(f'  - {key}: {json1[key]}')
+            differences.append(f'  + {key}: {json2[key]}')
         else:
-            differences.append(f'  {key}: {json1[key]}')
+            differences.append(f'    {key}: {json1[key]}')
     return differences
 
 
