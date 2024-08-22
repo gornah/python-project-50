@@ -10,3 +10,4 @@
 
 ### Asciinemas:
 [![asciicast](https://asciinema.org/a/672675.svg)](https://asciinema.org/a/672675)
+[![asciicast](https://asciinema.org/a/673120.svg)](https://asciinema.org/a/673120)
