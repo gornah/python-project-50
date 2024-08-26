@@ -1,5 +1,11 @@
 {
-    "key2": "value2",
-    "key3": "value33",
-    "key4": "value4"
+  "key1": {
+    "key3": 200,
+    "key4": null,
+    "key5": {
+      "key6": ""
+      }
+    },
+  "key7": 123,
+  "key8": false
 }

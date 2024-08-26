@@ -1,5 +1,6 @@
 import os
 from gendiff.loader import load_json, load_yaml
+from gendiff.formatter import format_stylish
 
 
 def load_file(file_path):
@@ -13,24 +14,37 @@ def load_file(file_path):
 
 
 def compare_files(file1, file2):
-    differences = []
-    all_keys = sorted(set(file1.keys()).union(file2.keys()))
+    diff = {}
+    all_keys = set(file1.keys()).union(file2.keys())
+
     for key in all_keys:
-        if key in file1 and key not in file2:
-            differences.append(f'  - {key}: {file1[key]}')
-        elif key in file2 and key not in file1:
-            differences.append(f'  + {key}: {file2[key]}')
+        if key not in file2:
+            diff[key] = {'status': 'removed', 'value': file1[key]}
+        elif key not in file1:
+            diff[key] = {'status': 'added', 'value': file2[key]}
+        elif isinstance(file1[key], dict) and isinstance(file2[key], dict):
+            diff[key] = {
+                'status': 'nested',
+                'children': compare_files(file1[key], file2[key])
+            }
         elif file1[key] != file2[key]:
-            differences.append(f'  - {key}: {file1[key]}')
-            differences.append(f'  + {key}: {file2[key]}')
+            diff[key] = {
+                'status': 'changed',
+                'old_value': file1[key],
+                'new_value': file2[key]
+            }
         else:
-            differences.append(f'    {key}: {file1[key]}')
-    return differences
+            diff[key] = {'status': 'unchanged', 'value': file1[key]}
+
+    return diff
 
 
-def generate_diff(file_path1, file_path2):
+def generate_diff(file_path1, file_path2, formatter='stylish'):
     data1 = load_file(file_path1)
     data2 = load_file(file_path2)
     differences = compare_files(data1, data2)
 
-    return '{\n' + '\n'.join(differences) + '\n}'
+    if formatter == 'stylish':
+        return format_stylish(differences, depth=0)
+    else:
+        raise ValueError(f"Unknown formatter: {formatter}")
