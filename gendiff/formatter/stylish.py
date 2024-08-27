@@ -42,13 +42,14 @@ def format_changed_entry(key, value, depth):
 
 
 def format_value(value, depth):
-    indent = ' ' * ((depth + 1) * 4)
+    indent_size = 4
+    indent = ' ' * ((depth + 1) * indent_size)
 
     if isinstance(value, dict):
         lines = ['{']
         for key, val in value.items():
             lines.append(f"{indent}{key}: {format_value(val, depth + 1)}")
-        lines.append(f"{' ' * (depth * 4)}}}")
+        lines.append(f"{' ' * (depth * indent_size)}}}")
         return '\n'.join(lines)
     if isinstance(value, bool):
         return 'true' if value else 'false'
