@@ -1,0 +1,30 @@
+{
+    "key1": {
+        "key2": {
+            "status": "removed"
+        },
+        "key4": {
+            "status": "changed",
+            "old_value": "true",
+            "new_value": "null"
+        },
+        "key5": {
+            "key6": {
+                "status": "changed",
+                "old_value": "value",
+                "new_value": ""
+            }
+        }
+    },
+    "key7": {
+        "status": "changed",
+        "old_value": {
+            "key8": 123
+        },
+        "new_value": 123
+    },
+    "key9": {
+        "status": "added",
+        "value": "false"
+    }
+}

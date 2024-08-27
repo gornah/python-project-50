@@ -12,14 +12,15 @@ def file_path():
         'yaml1': os.path.join('tests', 'fixtures', 'file1.yml'),
         'yaml2': os.path.join('tests', 'fixtures', 'file2.yml'),
         'result_stylish': os.path.join('tests', 'fixtures', 'result_style.txt'),
-        'result_plain': os.path.join('tests', 'fixtures', 'result_plain.txt')
+        'result_plain': os.path.join('tests', 'fixtures', 'result_plain.txt'),
+        'result_json': os.path.join('tests', 'fixtures', 'result_json.txt')
     }
 
 
 @pytest.fixture
 def expected_result(file_path):
     results = {}
-    for key in ['stylish', 'plain']:
+    for key in ['stylish', 'plain', 'json']:
         result_path = file_path[f'result_{key}']
         with open(result_path, 'r') as file:
             results[key] = file.read()
@@ -52,3 +53,17 @@ def test_gendiff_yaml_plain(file_path, expected_result):
                          file_path['yaml2'],
                          formatter='plain')
     assert diff == expected_result['plain']
+
+
+def test_gendiff_json_json(file_path, expected_result):
+    diff = generate_diff(file_path['json1'],
+                         file_path['json2'],
+                         formatter='plain')
+    assert diff == expected_result['plain']
+
+
+def test_gendiff_yaml_json(file_path, expected_result):
+    diff = generate_diff(file_path['yaml1'],
+                         file_path['yaml2'],
+                         formatter='json')
+    assert diff == expected_result['json']

@@ -2,6 +2,7 @@ import os
 from gendiff.loader import load_json, load_yaml
 from gendiff.formatter.stylish import format_stylish
 from gendiff.formatter.plain import format_plain
+from gendiff.formatter.json import format_json
 
 
 def load_file(file_path):
@@ -49,5 +50,7 @@ def generate_diff(file_path1, file_path2, formatter='stylish'):
         return format_stylish(differences, depth=0)
     if formatter == 'plain':
         return format_plain(differences, path='')
+    if formatter == 'json':
+        return format_json(differences)
     else:
         raise ValueError(f"Unknown formatter: {formatter}")
