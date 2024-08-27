@@ -10,7 +10,8 @@ def format_stylish(diff, depth=0):
 
 
 def process_diff_entry(key, value, depth):
-    indent = ' ' * (depth * 4)
+    indent_size = 4
+    indent = ' ' * (depth * indent_size)
     status = value.get('status')
 
     if status == 'nested':
@@ -32,7 +33,8 @@ def format_nested_entry(key, children, depth):
 
 
 def format_changed_entry(key, value, depth):
-    indent = ' ' * (depth * 4)
+    indent_size = 4
+    indent = ' ' * (depth * indent_size)
     return [
         f"{indent}  - {key}: {format_value(value['old_value'], depth + 1)}",
         f"{indent}  + {key}: {format_value(value['new_value'], depth + 1)}"
