@@ -1,7 +1,8 @@
 import os
 import pytest
+import json
 from gendiff.gendiff import generate_diff
-# from gendiff.loader import load_json, load_yaml
+from gendiff.engine.loader import load_file
 
 
 @pytest.fixture
@@ -23,47 +24,41 @@ def expected_result(file_path):
     for key in ['stylish', 'plain', 'json']:
         result_path = file_path[f'result_{key}']
         with open(result_path, 'r') as file:
-            results[key] = file.read()
+            if key == 'json':
+                results[key] = json.load(file)
+            else:
+                results[key] = file.read()
     return results
 
 
-def test_gendiff_json_style(file_path, expected_result):
-    diff = generate_diff(file_path['json1'],
-                         file_path['json2'],
-                         formatter='stylish')
-    assert diff == expected_result['stylish']
+@pytest.mark.parametrize("file1_key, file2_key, formatter, result_key", [
+    ('json1', 'json2', 'stylish', 'stylish'),
+    ('yaml1', 'yaml2', 'stylish', 'stylish'),
+    ('json1', 'json2', 'plain', 'plain'),
+    ('yaml1', 'yaml2', 'plain', 'plain'),
+    ('json1', 'json2', 'json', 'json'),
+    ('yaml1', 'yaml2', 'json', 'json'),
+])
+def test_gendiff(file_path, expected_result,
+                 file1_key, file2_key, formatter, result_key):
+
+    diff = generate_diff(file_path[file1_key], file_path[file2_key],
+                         formatter=formatter)
+    if formatter == 'json':
+        assert json.loads(diff) == expected_result[result_key]
+    else:
+        assert diff == expected_result[result_key]
 
 
-def test_gendiff_yaml_style(file_path, expected_result):
-    diff = generate_diff(file_path['yaml1'],
-                         file_path['yaml2'],
-                         formatter='stylish')
-    assert diff == expected_result['stylish']
+def test_unsupported_file_extension():
+    with pytest.raises(ValueError,
+                       match='Unsupported file format: .unsupported'):
+        load_file('file.unsupported')
 
 
-def test_gendiff_json_plain(file_path, expected_result):
-    diff = generate_diff(file_path['json1'],
-                         file_path['json2'],
-                         formatter='plain')
-    assert diff == expected_result['plain']
-
-
-def test_gendiff_yaml_plain(file_path, expected_result):
-    diff = generate_diff(file_path['yaml1'],
-                         file_path['yaml2'],
-                         formatter='plain')
-    assert diff == expected_result['plain']
-
-
-def test_gendiff_json_json(file_path, expected_result):
-    diff = generate_diff(file_path['json1'],
-                         file_path['json2'],
-                         formatter='plain')
-    assert diff == expected_result['plain']
-
-
-def test_gendiff_yaml_json(file_path, expected_result):
-    diff = generate_diff(file_path['yaml1'],
-                         file_path['yaml2'],
-                         formatter='json')
-    assert diff == expected_result['json']
+def test_unsupported_format():
+    with pytest.raises(ValueError,
+                       match='Unknown formatter: Unsupported_formatter'):
+        generate_diff('tests/fixtures/file1.json',
+                      'tests/fixtures/file2.json',
+                      formatter='Unsupported_formatter')

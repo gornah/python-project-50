@@ -1,4 +1,13 @@
 def format_plain(diff, path=''):
+    """
+    Format the difference between two data structures in a plain text style.
+
+    This function generates a plain text representation of the differences
+    between two data structures, typically JSON or YAML, by traversing
+    through the nested dictionary `diff`. The output reflects the changes
+    in a human-readable format that highlights added, removed, and modified
+    properties.
+    """
     lines = []
 
     for key, value in sorted(diff.items()):
@@ -27,6 +36,17 @@ def format_plain(diff, path=''):
 
 
 def format_value_plain(value):
+    """
+    Format a value for plain text representation.
+
+    This function takes a value and formats it for inclusion in a plain text
+    difference report. The formatting is based on the type of the value:
+    - Dictionaries are represented as '[complex value]'.
+    - Booleans are converted to 'true' or 'false'.
+    - None is represented as 'null'.
+    - Strings are enclosed in single quotes.
+    - Other types are converted to their string representation.
+    """
     if isinstance(value, dict):
         return '[complex value]'
     if isinstance(value, bool):

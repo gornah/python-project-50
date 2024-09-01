@@ -1,21 +1,4 @@
 {
-    "key1": {
-        "key2": {
-            "status": "removed"
-        },
-        "key4": {
-            "status": "changed",
-            "old_value": "true",
-            "new_value": "null"
-        },
-        "key5": {
-            "key6": {
-                "status": "changed",
-                "old_value": "value",
-                "new_value": ""
-            }
-        }
-    },
     "key7": {
         "status": "changed",
         "old_value": {
@@ -25,6 +8,34 @@
     },
     "key9": {
         "status": "added",
-        "value": "false"
+        "value": false
+    },
+    "key1": {
+        "status": "nested",
+        "children": {
+            "key4": {
+                "status": "changed",
+                "old_value": true,
+                "new_value": null
+            },
+            "key3": {
+                "status": "unchanged",
+                "value": 200
+            },
+            "key2": {
+                "status": "removed",
+                "value": "Value 1"
+            },
+            "key5": {
+                "status": "nested",
+                "children": {
+                    "key6": {
+                        "status": "changed",
+                        "old_value": "value",
+                        "new_value": ""
+                    }
+                }
+            }
+        }
     }
 }

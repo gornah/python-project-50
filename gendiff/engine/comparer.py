@@ -1,4 +1,14 @@
 def compare_files(file1, file2):
+    """
+    Compare two dictionaries representing file contents and return their
+    differences.
+    -------
+    Returns a dictionary representing the differences between the two files.
+    The keys represent the property names, and the values are dictionaries
+    describing the status ('added', 'removed', 'nested', 'changed', 'unchanged')
+    and relevant data (e.g., 'value', 'old_value', 'new_value', 'children').
+    """
+
     diff = {}
     all_keys = set(file1.keys()).union(file2.keys())
 

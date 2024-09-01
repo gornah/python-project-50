@@ -4,6 +4,9 @@ from .json import format_json
 
 
 def get_format(formatter_name):
+    """
+    Retrieve the formatting function based on the provided formatter name.
+    """
     if formatter_name == 'stylish':
         return format_stylish
     elif formatter_name == 'plain':

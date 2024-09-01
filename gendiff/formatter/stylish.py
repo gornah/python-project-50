@@ -1,4 +1,12 @@
 def format_stylish(diff, depth=0):
+    """
+    Format a nested dictionary into a stylish string representation.
+
+    This function takes a dictionary representing the differences between two
+    configuration files and formats it into a string with a "stylish" format.
+    The stylish format uses indentation to represent the hierarchy of the
+    nested structures, making it easy to read.
+    """
     lines = []
     indent_size = 4
     indent = ' ' * (depth * indent_size)
@@ -10,6 +18,16 @@ def format_stylish(diff, depth=0):
 
 
 def process_diff_entry(key, value, depth):
+    """
+    Process a single entry in the difference dictionary and generate the
+    corresponding formatted output line(s).
+
+    This function handles formatting of a single key-value entry in the
+    difference dictionary based on its status. It produces appropriately
+    indented lines for each type of status: 'nested', 'added', 'removed',
+    'changed', and 'unchanged'. It calls helper functions to handle
+    specific formatting requirements.
+    """
     indent_size = 4
     indent = ' ' * (depth * indent_size)
     status = value.get('status')
@@ -26,6 +44,13 @@ def process_diff_entry(key, value, depth):
 
 
 def format_nested_entry(key, children, depth):
+    """
+    Format a nested entry in the difference dictionary.
+
+    This function handles the formatting of properties that have nested
+    differences. It generates a properly indented formatted block for
+    nested properties and their differences.
+    """
     indent_size = 4
     indent = ' ' * (depth * indent_size)
     nested = format_stylish(children, depth + 1)
@@ -33,6 +58,15 @@ def format_nested_entry(key, children, depth):
 
 
 def format_changed_entry(key, value, depth):
+    """
+    Format a changed entry in the difference dictionary.
+
+    This function generates a formatted representation for properties that have
+    changed values between two configurations. It produces two lines:
+    one indicating the old value (with a minus sign) and one indicating the
+    new value (with a plus sign). The lines are indented according to the
+    specified depth.
+    """
     indent_size = 4
     indent = ' ' * (depth * indent_size)
     return [
@@ -42,6 +76,16 @@ def format_changed_entry(key, value, depth):
 
 
 def format_value(value, depth):
+    """
+    Format a value for inclusion in a difference output.
+
+    This function formats various types of values for inclusion in the output
+    of a difference comparison. It handles:
+    - nested dictionaries
+    - boolean values
+    - `None` values
+    and formats them with proper indentation based on the specified depth.
+    """
     indent_size = 4
     indent = ' ' * ((depth + 1) * indent_size)
 
